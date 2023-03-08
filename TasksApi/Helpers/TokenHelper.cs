@@ -21,7 +21,8 @@ namespace TasksApi.Helpers
                 Subject = claimsIdentity,
                 Issuer = Issuer,
                 Expires = DateTime.Now.AddMinutes(15),
-                SigningCredentials = signingCredentials
+                SigningCredentials = signingCredentials, 
+                Audience = Audience
             };
 
             var securityToken = handler.CreateToken(securityTokenDescriptor);
