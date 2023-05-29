@@ -6,7 +6,10 @@ namespace TasksApi.Interfaces
     {
         Task<GetTasksResponse> GetTasks(int userId);
 
+        Task<TaskResponse> GetTask(int id);
+
         Task<SaveTaskResponse> SaveTask(Entities.Task taskEntity);
+
         Task<SaveTaskResponse> UpdateTask(Entities.Task taskEntity);
 
         Task<DeleteTaskResponse> DeleteTask(int taskId);

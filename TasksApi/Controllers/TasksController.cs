@@ -18,7 +18,7 @@ namespace TasksApi.Controllers
             this.tasksService = tasksService;
         }
 
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetTasks()
         {
             var tasksResponse = await tasksService.GetTasks(UserId);
@@ -31,7 +31,20 @@ namespace TasksApi.Controllers
             return Ok(tasksResponse.Tasks.ConvertAll(x => new TaskResponse { Id = x.Id, IsCompleted = x.IsCompleted, Name = x.Name, Ts = x.Ts }));
         }
 
-        [HttpPost]
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetTask(int id)
+        {
+            var taskResponse = await tasksService.GetTask(id);
+            if (taskResponse != null)
+            {
+
+                return UnprocessableEntity(taskResponse);
+            }
+
+            return Ok(taskResponse);
+        }
+
+        [HttpPost, Route("add")]
         public async Task<IActionResult> Post(TaskRequest taskRequest)
         {
 
@@ -47,7 +60,7 @@ namespace TasksApi.Controllers
             return Ok(new TaskResponse { Id = saveTaskResponse.Task.Id, IsCompleted = saveTaskResponse.Task.IsCompleted, Name = saveTaskResponse.Task.Name, Ts = saveTaskResponse.Task.Ts });
         }
 
-        [HttpPut]
+        [HttpPut, Route("update")]
         public async Task<IActionResult> Put(TaskRequest taskRequest)
         {
             var task = new Entities.Task { Id = taskRequest.Id, IsCompleted = taskRequest.IsCompleted, Name = taskRequest.Name, Ts = taskRequest.Ts, UserId = UserId };
@@ -60,7 +73,7 @@ namespace TasksApi.Controllers
             return Ok(new TaskResponse { Id = saveTaskResponse.Task.Id, IsCompleted = saveTaskResponse.Task.IsCompleted, Name = saveTaskResponse.Task.Name, Ts = saveTaskResponse.Task.Ts });
         }
 
-        [HttpDelete]
+        [HttpDelete, Route("delete")]
         public async Task<IActionResult> Delete(int taskId)
         {
             var task = await tasksService.DeleteTask(taskId);

@@ -15,6 +15,20 @@ namespace TasksApi.Services
             this.dbContext = dbContext;
         }
 
+        public async Task<TaskResponse> GetTask(int id)
+        {
+
+            Entities.Task task = await dbContext.Tasks.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            return new TaskResponse()
+            {
+                Id = task.Id,
+                IsCompleted = task.IsCompleted,
+                Name = task.Name,
+                Ts = task.Ts
+            };
+        }
+
         public async Task<GetTasksResponse> GetTasks(int userId)
         {
             List<Entities.Task> tasks = await dbContext.Tasks.Where(x => x.UserId == userId).ToListAsync();

@@ -35,6 +35,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddCors(options => options.AddPolicy("AllowAllHeadersPolicy", builder =>
+    builder.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+));
 
 var app = builder.Build();
 
@@ -52,5 +57,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowAllHeadersPolicy");
 
 app.Run();
